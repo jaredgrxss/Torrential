@@ -1,0 +1,38 @@
+{
+  "name": "torrential",
+  "version": "1.0.0",
+  "description": "A bit torrent client written in typescript",
+  "keywords": [
+    "Typescript",
+    "BitTorrent"
+  ],
+  "homepage": "https://github.com/jaredgrxss/Torrential#readme",
+  "bugs": {
+    "url": "https://github.com/jaredgrxss/Torrential/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaredgrxss/Torrential.git"
+  },
+  "license": "ISC",
+  "author": "Jared Gross",
+  "type": "module",
+  "main": "lib/index",
+  "types": "lib/index",
+  "scripts": {
+    "build": "tsc -p .",
+    "build:watch": "tsc -p . --watch",
+    "format": "prettier --write \"src/**/*.{ts,js,json,md}\"",
+    "start": "npm run build:live",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.1.0",
+    "husky": "^9.1.7",
+    "jest": "^30.0.5",
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.4.1",
+    "typescript": "^5.9.2"
+  }
+}
