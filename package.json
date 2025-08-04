@@ -20,19 +20,27 @@
   "main": "lib/index",
   "types": "lib/index",
   "scripts": {
-    "build": "tsc -p .",
-    "build:watch": "tsc -p . --watch",
+    "build": "tsc --build",
+    "build:watch": "tsc --build --watch",
     "format": "prettier --write \"src/**/*.{ts,js,json,md}\"",
-    "start": "npm run build:live",
-    "test": "jest"
+    "start": "node lib/index.js",
+    "dev": "node --import ts-node/esm src/index.ts",
+    "test": "jest",
+    "prepare": "husky install"
   },
   "devDependencies": {
+    "@jest/globals": "^30.0.5",
+    "@types/bencode": "^2.0.4",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.1.0",
     "husky": "^9.1.7",
     "jest": "^30.0.5",
     "prettier": "^3.6.2",
     "ts-jest": "^29.4.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "bencode": "^4.0.0"
   }
 }
