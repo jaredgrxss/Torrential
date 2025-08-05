@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import bencode from "bencode";
 import { fileURLToPath } from "url";
+import { getPeers } from "./helpers/tracker.js";
 
 try {
   const fileName = fileURLToPath(import.meta.url);
@@ -9,7 +10,7 @@ try {
   const filePath = path.join(dir, "big-buck-bunny.torrent");
 
   const torrent: any = bencode.decode(fs.readFileSync(filePath));
-  console.log(torrent.announce.toString("utf8"));
+  getPeers(torrent, (peers: any) => {});
 } catch (e) {
   console.log(`Error fetching file ${e}`);
 }
