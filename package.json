@@ -24,7 +24,7 @@
     "build:watch": "tsc --build --watch",
     "format": "prettier --write \"src/**/*.{ts,js,json,md}\"",
     "start": "node lib/index.js",
-    "dev": "node --import ts-node/esm src/index.ts",
+    "dev": "tsx src/index.ts",
     "test": "jest",
     "prepare": "husky install"
   },
@@ -37,7 +37,7 @@
     "jest": "^30.0.5",
     "prettier": "^3.6.2",
     "ts-jest": "^29.4.1",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
     "typescript": "^5.9.2"
   },
   "dependencies": {

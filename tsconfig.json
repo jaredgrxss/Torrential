@@ -19,10 +19,6 @@
     "strictNullChecks": true /* When type checking, take into account 'null' and 'undefined'. */,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "ts-node": {
-    "esm": true, // <-- This is the key line
-    "files": true // <-- This ensures tsconfig files are checked
-  },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.test.ts"]
 }
