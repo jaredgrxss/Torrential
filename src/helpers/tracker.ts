@@ -2,7 +2,8 @@ import * as dgram from "dgram";
 import { Buffer } from "buffer";
 import { randomBytes } from "crypto";
 import { genId } from "./util.js";
-import { ConnectionResponse } from "../@types/connection.js";
+import { AnnounceResponse, ConnectionResponse } from "../@types/connection.js";
+import * as torrentParser from "./torrent-parser.js";
 
 function getPeers(torrent: any, callback: Function) {
   const socket: dgram.Socket = dgram.createSocket("udp4");
@@ -57,16 +58,18 @@ function buildAnnounceReq(
   const buf: Buffer<ArrayBuffer> = Buffer.allocUnsafe(98);
   // connection id
   connId.copy(buf, 0);
-  // transaction id
+  // action
   buf.writeUInt32BE(1, 8);
+  // transaction id
+  randomBytes(4).copy(buf, 12);
   // info hash
-  // torrentParser.infoHash(torrent).copy(buf, 16);
+  torrentParser.infoHash(torrent).copy(buf, 16);
   // peerId
-  genId().copy(buf, 56);
+  genId().copy(buf, 36);
   // downloaded
   Buffer.alloc(8).copy(buf, 56);
   // left
-  // torrentParser.size(torrent).copy(buf, 64);
+  torrentParser.size(torrent).copy(buf, 64);
   // uploaded
   Buffer.alloc(8).copy(buf, 72);
   // event
@@ -75,6 +78,8 @@ function buildAnnounceReq(
   buf.writeUInt32BE(0, 80);
   // key
   randomBytes(4).copy(buf, 88);
+  // num want
+  buf.writeInt32BE(-1, 92);
   // port
   buf.writeUInt16BE(port, 96);
 
@@ -89,6 +94,29 @@ function parseConnResponse(res: Buffer<ArrayBufferLike>): ConnectionResponse {
   };
 }
 
-function parseAnnounceRes(res: Buffer<ArrayBufferLike>) {}
+function parseAnnounceRes(res: Buffer<ArrayBufferLike>): AnnounceResponse {
+  function group(
+    iterable: Buffer<ArrayBufferLike>,
+    groupSize: number
+  ): Buffer<ArrayBufferLike>[] {
+    let groups: Buffer<ArrayBufferLike>[] = [];
+    for (let i = 0; i < iterable.length; i += groupSize) {
+      groups.push(iterable.subarray(i, i + groupSize));
+    }
+    return groups;
+  }
+  return {
+    action: res.readUInt32BE(0),
+    transactionId: res.readUInt32BE(4),
+    leechers: res.readUInt32BE(8),
+    seeders: res.readUInt32BE(12),
+    peers: group(res.subarray(20), 6).map((address) => {
+      return {
+        ip: address.subarray(0, 4).join("."),
+        port: address.readUInt16BE(4),
+      };
+    }),
+  };
+}
 
 export { getPeers };
