@@ -1,7 +1,7 @@
 import bencode from "bencode";
 import fs from "fs";
+import bignum from "bignum";
 import { createHash } from "crypto";
-import { toBuffer } from "bignum";
 
 function open(filePath: string): any {
   return bencode.decode(fs.readFileSync(filePath));
@@ -13,7 +13,7 @@ function size(torrent: any): Buffer {
         .map((file: any) => file.length)
         .reduce((a: number, b: number) => a + b)
     : torrent.info.length;
-  return toBuffer(size, { endian: "big", size: 8 });
+  return bignum.toBuffer(size, { endian: "big", size: 8 });
 }
 
 function infoHash(torrent: any): Buffer {
